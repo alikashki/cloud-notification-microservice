@@ -1,0 +1,33 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: user-manager
+  namespace: user-manager
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: user-manager
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    # Average CPU usage of the Pods, measured against each Pod's CPU *request*.
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0     # react immediately to load
+      policies:
+        - type: Pods
+          value: 2                      # add at most 2 Pods ...
+          periodSeconds: 30             # ... every 30 seconds
+    scaleDown:
+      stabilizationWindowSeconds: 60    # wait 60 s of low load before removing Pods
+      policies:
+        - type: Pods
+          value: 1                      # remove at most 1 Pod ...
+          periodSeconds: 30             # ... every 30 seconds

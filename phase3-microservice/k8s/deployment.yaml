@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-manager
+  namespace: user-manager
+  labels:
+    app: user-manager
+spec:
+  # replicas is managed by the HorizontalPodAutoscaler (see phase4/k8s/hpa)
+  selector:
+    matchLabels:
+      app: user-manager
+  template:
+    metadata:
+      labels:
+        app: user-manager
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker1
+      containers:
+        - name: user-manager
+          image: user-manager:phase3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8090
+          envFrom:
+            - configMapRef:
+                name: user-manager-config   # DB_HOST, DB_PORT, DB_NAME, HTTP_PORT
+            - secretRef:
+                name: user-manager-secret   # DB_USER, DB_PASSWORD
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          # Not ready (no traffic) while the database cannot be reached.
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8090
+            periodSeconds: 10
+            timeoutSeconds: 3
+          # Liveness only checks the process: a database outage must not restart this Pod.
+          livenessProbe:
+            tcpSocket:
+              port: 8090
+            periodSeconds: 20
+            failureThreshold: 3

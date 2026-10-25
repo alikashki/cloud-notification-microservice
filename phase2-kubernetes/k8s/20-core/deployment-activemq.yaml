@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: activemq
+  namespace: core
+  labels:
+    app: activemq
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: activemq
+  template:
+    metadata:
+      labels:
+        app: activemq
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker2
+      containers:
+        - name: activemq
+          image: docker.arvancloud.ir/webcenter/activemq:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 61616      # OpenWire (used by core)
+          envFrom:
+            - secretRef:
+                name: activemq-secret   # ACTIVEMQ_ADMIN_LOGIN, ACTIVEMQ_ADMIN_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          # ActiveMQ's default JVM max heap is about 1 GiB, so the memory limit must be
+          # above that. If the Pod shows OOMKilled in "kubectl describe pod", raise it.
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1536Mi
+          startupProbe:
+            tcpSocket:
+              port: 61616
+            periodSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            tcpSocket:
+              port: 61616
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 61616
+            periodSeconds: 20
+            failureThreshold: 6
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: activemq-pvc

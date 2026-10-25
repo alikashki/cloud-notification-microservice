@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="430" viewBox="0 0 1280 430" role="img" aria-label="Notification System: from Docker Compose to a highly available Kubernetes platform. Technologies: Docker, Kubernetes, Cilium, NGINX, HAProxy, Go, Spring Boot, MySQL, PostgreSQL, ActiveMQ">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="0.55" stop-color="#1e3a8a"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="430" rx="22" fill="url(#bg)"/>
+  <rect width="1280" height="430" rx="22" fill="url(#grid)"/>
+
+  <!-- decorative network graph -->
+  <g stroke="#ffffff" stroke-opacity="0.22" stroke-width="2" fill="none">
+    <path d="M1010 62 L1120 112 L1200 52"/>
+    <path d="M1120 112 L1090 192 L1190 232"/>
+    <path d="M1090 192 L990 232 L1010 62"/>
+    <path d="M990 232 L1120 112"/>
+  </g>
+  <g fill="url(#accent)">
+    <circle cx="1010" cy="62" r="11"/>
+    <circle cx="1120" cy="112" r="15"/>
+    <circle cx="1200" cy="52" r="9"/>
+    <circle cx="1090" cy="192" r="13"/>
+    <circle cx="1190" cy="232" r="10"/>
+    <circle cx="990" cy="232" r="9"/>
+  </g>
+
+  <!-- title -->
+  <g font-family="'Segoe UI', 'Helvetica Neue', 'DejaVu Sans', Arial, sans-serif" fill="#ffffff">
+    <text x="70" y="104" font-size="58" font-weight="800">Notification System</text>
+    <text x="70" y="152" font-size="27" font-weight="500" fill="#e0e7ff">From Docker Compose to Highly Available Kubernetes Platform</text>
+  </g>
+
+  <!-- phase chips -->
+  <g font-family="'Segoe UI', 'Helvetica Neue', 'DejaVu Sans', Arial, sans-serif" font-size="16" font-weight="700" text-anchor="middle">
+    <rect x="70" y="186" width="142" height="38" rx="19" fill="#ffffff" fill-opacity="0.14"/>
+    <text x="141.0" y="211" fill="#ffffff">1 · Docker</text>
+    <rect x="226" y="186" width="181" height="38" rx="19" fill="#ffffff" fill-opacity="0.14"/>
+    <text x="316.5" y="211" fill="#ffffff">2 · Kubernetes</text>
+    <rect x="421" y="186" width="200" height="38" rx="19" fill="#ffffff" fill-opacity="0.14"/>
+    <text x="521.0" y="211" fill="#ffffff">3 · Microservice</text>
+    <rect x="635" y="186" width="318" height="38" rx="19" fill="#ffffff" fill-opacity="0.14"/>
+    <text x="794.0" y="211" fill="#ffffff">4 · Autoscaling + NGINX + HA</text>
+  </g>
+
+  <!-- technology tiles -->
+  <text x="640.0" y="270" text-anchor="middle" font-family="'Segoe UI', 'DejaVu Sans', Arial, sans-serif" font-size="13" letter-spacing="3" font-weight="700" fill="#c7d2fe" fill-opacity="0.9">BUILT WITH</text>
+
+  <g>
+    <rect x="77.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(127.0,334) scale(0.92)"><rect x="-3.5" y="-19" width="7" height="7" rx="1" fill="#2496ED"/><rect x="-11.5" y="-11" width="7" height="7" rx="1" fill="#2496ED"/><rect x="-3.5" y="-11" width="7" height="7" rx="1" fill="#2496ED"/><rect x="4.5" y="-11" width="7" height="7" rx="1" fill="#2496ED"/><rect x="-19.5" y="-3" width="7" height="7" rx="1" fill="#2496ED"/><rect x="-11.5" y="-3" width="7" height="7" rx="1" fill="#2496ED"/><rect x="-3.5" y="-3" width="7" height="7" rx="1" fill="#2496ED"/><rect x="4.5" y="-3" width="7" height="7" rx="1" fill="#2496ED"/><rect x="12.5" y="-3" width="7" height="7" rx="1" fill="#2496ED"/><path d="M-24 6 H20 C23 6 25 4 26 2 C23.5 1.5 22.5 -0.5 23 -2.5 C20.5 -1.5 19.5 0.5 19.5 2.5 H-24 C-23 14 -14 21 -1 21 C10 21 19 16 22 8 L-24 8 Z" fill="#2496ED"/></g>
+    <text x="127.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Docker</text>
+  </g>
+  <g>
+    <rect x="191.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(241.0,334) scale(0.92)"><polygon points="0.0,-25.0 19.5,-15.6 24.4,5.6 10.8,22.5 -10.8,22.5 -24.4,5.6 -19.5,-15.6" fill="#326CE5" stroke="#326CE5" stroke-width="3" stroke-linejoin="round"/><circle r="8" fill="none" stroke="#fff" stroke-width="2.6"/><line x1="0" y1="0" x2="0.0" y2="-13.0" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><line x1="0" y1="0" x2="10.2" y2="-8.1" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><line x1="0" y1="0" x2="12.7" y2="2.9" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><line x1="0" y1="0" x2="5.6" y2="11.7" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><line x1="0" y1="0" x2="-5.6" y2="11.7" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><line x1="0" y1="0" x2="-12.7" y2="2.9" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><line x1="0" y1="0" x2="-10.2" y2="-8.1" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><circle cx="0.0" cy="-13.0" r="2.6" fill="#fff"/><circle cx="10.2" cy="-8.1" r="2.6" fill="#fff"/><circle cx="12.7" cy="2.9" r="2.6" fill="#fff"/><circle cx="5.6" cy="11.7" r="2.6" fill="#fff"/><circle cx="-5.6" cy="11.7" r="2.6" fill="#fff"/><circle cx="-12.7" cy="2.9" r="2.6" fill="#fff"/><circle cx="-10.2" cy="-8.1" r="2.6" fill="#fff"/></g>
+    <text x="241.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Kubernetes</text>
+  </g>
+  <g>
+    <rect x="305.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(355.0,334) scale(0.92)"><polygon points="-0.0,-13.8 -0.0,-2.3 -10.0,3.5 -20.0,-2.3 -20.0,-13.8 -10.0,-19.5" fill="#F8C517" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><polygon points="20.0,-13.8 20.0,-2.3 10.0,3.5 0.0,-2.3 0.0,-13.8 10.0,-19.5" fill="#8A8D91" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><polygon points="10.0,3.3 10.0,14.8 0.0,20.5 -10.0,14.8 -10.0,3.2 -0.0,-2.5" fill="#F8C517" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><polygon points="-5.7,-10.5 -5.7,-5.5 -10.0,-3.0 -14.3,-5.5 -14.3,-10.5 -10.0,-13.0" fill="#fff" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><polygon points="14.3,-10.5 14.3,-5.5 10.0,-3.0 5.7,-5.5 5.7,-10.5 10.0,-13.0" fill="#fff" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/><polygon points="4.3,6.5 4.3,11.5 0.0,14.0 -4.3,11.5 -4.3,6.5 -0.0,4.0" fill="#fff" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></g>
+    <text x="355.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Cilium</text>
+  </g>
+  <g>
+    <rect x="419.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(469.0,334) scale(0.92)"><polygon points="0.0,-25.0 21.7,-12.5 21.7,12.5 0.0,25.0 -21.7,12.5 -21.7,-12.5" fill="#009639" stroke="#009639" stroke-width="3" stroke-linejoin="round"/><path d="M-8 11 V-11 L8 11 V-11" fill="none" stroke="#fff" stroke-width="5.5" stroke-linejoin="miter" stroke-linecap="butt"/></g>
+    <text x="469.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">NGINX</text>
+  </g>
+  <g>
+    <rect x="533.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(583.0,334) scale(0.92)"><circle cx="-18" cy="0" r="5" fill="#0E6FB0"/><circle cx="18" cy="-16" r="5" fill="#0E6FB0"/><path d="M-13 0 C0 0 2 -16 13 -16" fill="none" stroke="#0E6FB0" stroke-width="2.6"/><circle cx="18" cy="0" r="5" fill="#0E6FB0"/><path d="M-13 0 C0 0 2 0 13 0" fill="none" stroke="#0E6FB0" stroke-width="2.6"/><circle cx="18" cy="16" r="5" fill="#0E6FB0"/><path d="M-13 0 C0 0 2 16 13 16" fill="none" stroke="#0E6FB0" stroke-width="2.6"/></g>
+    <text x="583.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">HAProxy</text>
+  </g>
+  <g>
+    <rect x="647.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(697.0,334) scale(0.92)"><g fill="#00ADD8"><rect x="-26" y="-8" width="9" height="3" rx="1.5"/><rect x="-30" y="-1.5" width="13" height="3" rx="1.5"/><rect x="-26" y="5" width="9" height="3" rx="1.5"/></g><text x="-12" y="9" font-family="DejaVu Sans, Verdana, Arial, sans-serif" font-size="29" font-weight="800" font-style="italic" fill="#00ADD8">GO</text></g>
+    <text x="697.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Go</text>
+  </g>
+  <g>
+    <rect x="761.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(811.0,334) scale(0.92)"><circle r="25" fill="#6DB33F"/><path d="M-14 12 C-14 -2 -5 -13 13 -14 C14 3 6 13 -12 14 Z" fill="#fff"/><path d="M-12 12 C-4 5 3 -1 9 -9" fill="none" stroke="#6DB33F" stroke-width="2" stroke-linecap="round"/></g>
+    <text x="811.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">Spring Boot</text>
+  </g>
+  <g>
+    <rect x="875.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(925.0,334) scale(0.92)"><path d="M-19 -14 V14 C-19 22 19 22 19 14 V-14" fill="#4479A1"/><ellipse cx="0" cy="-14" rx="19" ry="8" fill="#4479A1" stroke="#fff" stroke-width="1.5"/><path d="M-19 -2 C-19 6 19 6 19 -2" fill="none" stroke="#F29111" stroke-width="3"/><path d="M-19 8 C-19 16 19 16 19 8" fill="none" stroke="#F29111" stroke-width="3" opacity="0"/></g>
+    <text x="925.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">MySQL</text>
+  </g>
+  <g>
+    <rect x="989.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(1039.0,334) scale(0.92)"><path d="M-19 -14 V14 C-19 22 19 22 19 14 V-14" fill="#336791"/><ellipse cx="0" cy="-14" rx="19" ry="8" fill="#336791" stroke="#fff" stroke-width="1.5"/><path d="M-19 -2 C-19 6 19 6 19 -2" fill="none" stroke="#9DB7D5" stroke-width="3"/><path d="M-19 8 C-19 16 19 16 19 8" fill="none" stroke="#9DB7D5" stroke-width="3" opacity="0"/><text x="0" y="9" text-anchor="middle" font-family="DejaVu Sans, Verdana, Arial, sans-serif" font-size="14" font-weight="800" fill="#fff">Pg</text></g>
+    <text x="1039.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">PostgreSQL</text>
+  </g>
+  <g>
+    <rect x="1103.0" y="290" width="100" height="100" rx="18" fill="#ffffff" fill-opacity="0.96"/>
+    <g transform="translate(1153.0,334) scale(0.92)"><rect x="-24" y="-16" width="48" height="32" rx="5" fill="#D22128"/><path d="M-22 -13 L0 4 L22 -13" fill="none" stroke="#fff" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/><path d="M-22 14 L-8 0 M22 14 L8 0" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/></g>
+    <text x="1153.0" y="379" text-anchor="middle" font-family="DejaVu Sans, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#1f2937">ActiveMQ</text>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: auth-traffic
+  namespace: auth
+spec:
+  podSelector:
+    matchLabels:
+      app: auth
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # gRPC (50051): ONLY from the core Pods in namespace "core".
+    # namespaceSelector + podSelector in the SAME item = AND (core Pods AND in that namespace).
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: core
+          podSelector:
+            matchLabels:
+              app: core
+      ports:
+        - protocol: TCP
+          port: 50051
+    # HTTP API (8082): this is the public entry (NodePort 30082), so no "from" = any source.
+    - ports:
+        - protocol: TCP
+          port: 8082
+  egress:
+    # auth may talk ONLY to its own database (DNS is allowed by allow-dns-egress).
+    - to:
+        - podSelector:
+            matchLabels:
+              app: auth-db
+      ports:
+        - protocol: TCP
+          port: 3306

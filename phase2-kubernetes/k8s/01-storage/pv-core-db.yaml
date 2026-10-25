@@ -1,0 +1,17 @@
+# hostPath data lives on worker2, so the Pod that uses this PV must be pinned to worker2
+# (done with nodeSelector in the Deployment). DirectoryOrCreate: kubelet creates the
+# directory on the node if it is missing, so no ssh/manual mkdir is needed.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: core-db-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  hostPath:
+    path: /data/fum/core-db
+    type: DirectoryOrCreate

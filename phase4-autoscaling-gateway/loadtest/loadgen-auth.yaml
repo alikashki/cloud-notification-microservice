@@ -1,0 +1,42 @@
+# Load generator for the autoscaling demo. NOT part of the system: delete it when the test is over.
+# Every loop sends login requests through the NGINX gateway. A login hashes the password
+# (bcrypt), which is CPU-heavy, so the auth Pods get busy and the HPA scales them up.
+# It reuses the auth image only because it is Alpine and already on the nodes (busybox wget).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loadgen-auth
+  namespace: default
+  labels:
+    app: loadgen-auth
+spec:
+  replicas: 6                     # 6 parallel request loops
+  selector:
+    matchLabels:
+      app: loadgen-auth
+  template:
+    metadata:
+      labels:
+        app: loadgen-auth
+    spec:
+      containers:
+        - name: loadgen
+          image: auth:phase1
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              while true; do
+                wget -q -O /dev/null \
+                  --header 'Content-Type: application/json' \
+                  --post-data '{"email":"a@b.com","password":"Pass1234"}' \
+                  http://nginx.gateway.svc.cluster.local/user/login || sleep 1
+              done
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 32Mi

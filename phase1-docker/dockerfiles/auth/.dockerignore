@@ -1,0 +1,17 @@
+.git
+.gitignore
+.idea
+.vscode
+
+# Windows binary shipped in the repo - useless in a Linux image
+main.exe
+*.exe
+
+# Env files (contain credentials) - values are injected at runtime instead
+envs/
+
+# Old sample compose file from the repo (uses postgres, not relevant)
+docker-compose.yml
+Dockerfile
+.dockerignore
+*.md

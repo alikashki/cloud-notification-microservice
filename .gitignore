@@ -1,0 +1,19 @@
+# real configuration and secrets
+.env
+*.env
+!.env.example
+
+# image archives created while moving images to the nodes
+*.tar
+*.tar.gz
+
+# logs, editors, OS files
+*.log
+.idea/
+.vscode/
+.DS_Store
+
+# Go / Java build output (if you build the services locally)
+/phase3-microservice/user-manager/user-manager
+target/
+*.exe

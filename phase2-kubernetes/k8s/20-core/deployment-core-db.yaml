@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core-db
+  namespace: core
+  labels:
+    app: core-db
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: core-db
+  template:
+    metadata:
+      labels:
+        app: core-db
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker2
+      containers:
+        - name: postgres
+          image: docker.arvancloud.ir/library/postgres:13.13-bullseye
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: core-db-config      # POSTGRES_DB
+            - secretRef:
+                name: core-db-secret      # POSTGRES_USER, POSTGRES_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -h 127.0.0.1 -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 24
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -h 127.0.0.1 -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -h 127.0.0.1 -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\""]
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: core-db-pvc

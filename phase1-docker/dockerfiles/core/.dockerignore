@@ -1,0 +1,12 @@
+.git
+.gitignore
+.idea
+.vscode
+*.iml
+
+# Build output - the jar is built inside the image
+target/
+
+Dockerfile
+.dockerignore
+*.md

@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-db
+  namespace: auth
+  labels:
+    app: auth-db
+spec:
+  replicas: 1
+  # Recreate: stop the old Pod BEFORE starting the new one. With the default
+  # RollingUpdate two MySQL Pods would briefly share the same data directory.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: auth-db
+  template:
+    metadata:
+      labels:
+        app: auth-db
+    spec:
+      # The data (hostPath PV) lives on worker1, so this Pod must run there.
+      nodeSelector:
+        kubernetes.io/hostname: worker1
+      containers:
+        - name: mysql
+          image: docker.arvancloud.ir/library/mysql:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: auth-db-config      # MYSQL_DATABASE
+            - secretRef:
+                name: auth-db-secret      # MYSQL_ROOT_PASSWORD, MYSQL_USER, MYSQL_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          # startupProbe: gives the first-time initialisation up to 3 minutes
+          # before the other probes start judging the container.
+          startupProbe:
+            exec:
+              command: ["sh", "-c", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$MYSQL_ROOT_PASSWORD\" --silent"]
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$MYSQL_ROOT_PASSWORD\" --silent"]
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$MYSQL_ROOT_PASSWORD\" --silent"]
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: auth-db-pvc

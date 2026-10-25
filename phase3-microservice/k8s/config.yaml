@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-manager-config
+  namespace: user-manager
+data:
+  # The auth database lives in ANOTHER namespace, so we use the Service's full DNS name.
+  DB_HOST: "auth-db.auth.svc.cluster.local"
+  DB_PORT: "3306"
+  DB_NAME: "auth_db"
+  HTTP_PORT: "8090"

@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core
+  namespace: core
+  labels:
+    app: core
+spec:
+  # replicas is managed by the HorizontalPodAutoscaler (see phase4/k8s/hpa)
+  selector:
+    matchLabels:
+      app: core
+  template:
+    metadata:
+      labels:
+        app: core
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker2
+      # Core fails at start-up without PostgreSQL, so wait for the database and the broker.
+      initContainers:
+        - name: wait-for-deps
+          image: core:phase1
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c", "until nc -z -w 2 core-db 5432 && nc -z -w 2 activemq 61616; do echo waiting for core-db and activemq; sleep 2; done"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 32Mi
+      containers:
+        - name: core
+          image: core:phase1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: core-config      # JDBC url, schema, ActiveMQ url, auth addresses
+            - secretRef:
+                name: core-secret      # DB and ActiveMQ credentials
+          # JAVA_OPTS (-XX:MaxRAMPercentage=75) comes from the image, so the JVM heap
+          # follows this memory limit. If the Pod shows OOMKilled, raise the limit.
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          # /docs answers without a token (redirect to Swagger); other endpoints require one.
+          startupProbe:
+            httpGet:
+              path: /docs
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 36
+          readinessProbe:
+            httpGet:
+              path: /docs
+              port: 8080
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /docs
+              port: 8080
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3

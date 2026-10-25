@@ -1,0 +1,21 @@
+# MySQL accepts connections ONLY from the auth Pods of this namespace.
+# It needs no egress rule: the default-deny keeps it from starting any outgoing connection.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: auth-db-ingress
+  namespace: auth
+spec:
+  podSelector:
+    matchLabels:
+      app: auth-db
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: auth
+      ports:
+        - protocol: TCP
+          port: 3306

@@ -1,0 +1,25 @@
+# Lives in the AUTH namespace. NetworkPolicies are additive, so this adds one more allowed
+# client to the database (next to the auth Pods allowed by "auth-db-ingress") without
+# touching the Phase 2 files.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: auth-db-allow-user-manager
+  namespace: auth
+spec:
+  podSelector:
+    matchLabels:
+      app: auth-db
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: user-manager
+          podSelector:
+            matchLabels:
+              app: user-manager
+      ports:
+        - protocol: TCP
+          port: 3306

@@ -1,0 +1,14 @@
+# Only the broker port is published inside the cluster; the web console (8161) is not.
+apiVersion: v1
+kind: Service
+metadata:
+  name: activemq
+  namespace: core
+spec:
+  type: ClusterIP
+  selector:
+    app: activemq
+  ports:
+    - name: openwire
+      port: 61616
+      targetPort: 61616

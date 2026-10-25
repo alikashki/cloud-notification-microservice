@@ -1,0 +1,10 @@
+# The cluster has no StorageClass / dynamic provisioner, so PVs are created by hand.
+# no-provisioner = Kubernetes only binds PVCs to the PVs we define below.
+# WaitForFirstConsumer = binding happens when the Pod is scheduled.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain

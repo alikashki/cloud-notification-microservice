@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: auth
+  labels:
+    app: auth
+spec:
+  # replicas is managed by the HorizontalPodAutoscaler (see phase4/k8s/hpa)
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: worker1
+      # The auth service exits at start-up if MySQL is unreachable, so we wait for it first.
+      # We reuse the auth image (it is Alpine, so busybox "nc" exists) instead of pulling another one.
+      initContainers:
+        - name: wait-for-db
+          image: auth:phase1
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c", "until nc -z -w 2 auth-db 3306; do echo waiting for auth-db; sleep 2; done"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 32Mi
+      containers:
+        - name: auth
+          image: auth:phase1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8082
+            - name: grpc
+              containerPort: 50051
+          envFrom:
+            - configMapRef:
+                name: auth-config      # PORT
+            - secretRef:
+                name: auth-secret      # DB_URL, JWT_SECRET_KEY
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          # The service has no health endpoint, so we only check that the HTTP port accepts connections.
+          startupProbe:
+            tcpSocket:
+              port: 8082
+            periodSeconds: 3
+            failureThreshold: 20
+          readinessProbe:
+            tcpSocket:
+              port: 8082
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8082
+            periodSeconds: 20
+            failureThreshold: 3

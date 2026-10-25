@@ -1,0 +1,15 @@
+# External entry for the API (NodePort 30090 on every node).
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-manager
+  namespace: user-manager
+spec:
+  type: NodePort
+  selector:
+    app: user-manager
+  ports:
+    - name: http
+      port: 8090
+      targetPort: 8090
+      nodePort: 30090

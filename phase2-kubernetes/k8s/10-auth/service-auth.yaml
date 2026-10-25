@@ -1,0 +1,18 @@
+# Internal Service of auth (ClusterIP). The core service reaches it as
+# auth.auth.svc.cluster.local on the gRPC port. It is NOT reachable from outside the cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+  namespace: auth
+spec:
+  type: ClusterIP
+  selector:
+    app: auth
+  ports:
+    - name: http
+      port: 8082
+      targetPort: 8082
+    - name: grpc
+      port: 50051
+      targetPort: 50051

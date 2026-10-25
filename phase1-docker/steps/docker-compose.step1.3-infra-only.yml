@@ -1,0 +1,79 @@
+# Phase 1 - Step 1.3 (kept for documentation): infrastructure only - databases + ActiveMQ.
+# The complete stack is ../docker-compose.yml. Uses the same variables as .env.example.
+
+name: notification-system
+
+services:
+  # ---------- Auth side ----------
+  auth-db:
+    image: mysql:latest
+    container_name: auth-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${AUTH_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${AUTH_DB_NAME}
+      MYSQL_USER: ${AUTH_DB_USER}
+      MYSQL_PASSWORD: ${AUTH_DB_PASSWORD}
+    volumes:
+      - auth-db-data:/var/lib/mysql
+    networks:
+      - auth-net
+    healthcheck:
+      # -h 127.0.0.1 forces TCP, so the temporary init-time server (socket only)
+      # is not mistaken for the real one
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ---------- Core side ----------
+  core-db:
+    image: postgres:13.13-bullseye
+    container_name: core-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${CORE_DB_NAME}
+      POSTGRES_USER: ${CORE_DB_USER}
+      POSTGRES_PASSWORD: ${CORE_DB_PASSWORD}
+    volumes:
+      - core-db-data:/var/lib/postgresql/data
+    networks:
+      - core-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  activemq:
+    image: webcenter/activemq:latest
+    container_name: activemq
+    restart: unless-stopped
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: ${ACTIVEMQ_USER}
+      ACTIVEMQ_ADMIN_PASSWORD: ${ACTIVEMQ_PASSWORD}
+    volumes:
+      - activemq-data:/data
+    networks:
+      - core-net
+    healthcheck:
+      # checks that the OpenWire port (61616) accepts TCP connections
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/61616'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+# One network per microservice. auth-core-net carries ONLY the auth<->core gRPC
+# traffic (used from step 1.4). No database or broker port is published to the host.
+networks:
+  auth-net:
+  core-net:
+  auth-core-net:
+
+volumes:
+  auth-db-data:
+  core-db-data:
+  activemq-data:

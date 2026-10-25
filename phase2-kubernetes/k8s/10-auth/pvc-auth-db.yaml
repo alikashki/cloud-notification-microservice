@@ -1,0 +1,14 @@
+# Claim for the auth database storage. It is bound to the PV "auth-db-pv" explicitly.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auth-db-pvc
+  namespace: auth
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  volumeName: auth-db-pv
+  resources:
+    requests:
+      storage: 5Gi

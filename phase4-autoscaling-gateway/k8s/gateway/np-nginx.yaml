@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nginx-traffic
+  namespace: gateway
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # public entry: any source, this port only
+    - ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # NGINX may reach ONLY the three backends, each on its own HTTP port
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: auth
+          podSelector:
+            matchLabels:
+              app: auth
+      ports:
+        - protocol: TCP
+          port: 8082
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: user-manager
+          podSelector:
+            matchLabels:
+              app: user-manager
+      ports:
+        - protocol: TCP
+          port: 8090
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: core
+          podSelector:
+            matchLabels:
+              app: core
+      ports:
+        - protocol: TCP
+          port: 8080

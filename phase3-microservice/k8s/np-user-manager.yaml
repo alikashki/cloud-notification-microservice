@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: user-manager-traffic
+  namespace: user-manager
+spec:
+  podSelector:
+    matchLabels:
+      app: user-manager
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # public API (NodePort 30090): any source, this port only
+    - ports:
+        - protocol: TCP
+          port: 8090
+  egress:
+    # the ONLY thing this service may reach: the auth database, port 3306
+    # (no auth service, no core, no activemq, no core-db)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: auth
+          podSelector:
+            matchLabels:
+              app: auth-db
+      ports:
+        - protocol: TCP
+          port: 3306

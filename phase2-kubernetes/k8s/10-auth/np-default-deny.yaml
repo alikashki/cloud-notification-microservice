@@ -1,0 +1,12 @@
+# Step 1 of every NetworkPolicy setup: deny ALL traffic (in and out) for every Pod in the
+# namespace. The other np-*.yaml files then open only what is really needed.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: auth
+spec:
+  podSelector: {}          # empty selector = all Pods in this namespace
+  policyTypes:
+    - Ingress
+    - Egress

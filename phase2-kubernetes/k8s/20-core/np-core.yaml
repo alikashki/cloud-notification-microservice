@@ -1,0 +1,59 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: core-traffic
+  namespace: core
+spec:
+  podSelector:
+    matchLabels:
+      app: core
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # HTTP API (8080): public entry (NodePort 30080), so no "from" = any source.
+    - ports:
+        - protocol: TCP
+          port: 8080
+  egress:
+    # its own database
+    - to:
+        - podSelector:
+            matchLabels:
+              app: core-db
+      ports:
+        - protocol: TCP
+          port: 5432
+    # its own message broker
+    - to:
+        - podSelector:
+            matchLabels:
+              app: activemq
+      ports:
+        - protocol: TCP
+          port: 61616
+    # gRPC to the auth service in the other namespace (and nothing else in that namespace:
+    # no auth-db, no auth HTTP port)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: auth
+          podSelector:
+            matchLabels:
+              app: auth
+      ports:
+        - protocol: TCP
+          port: 50051
+    # Outgoing e-mail: core sends notifications through an SMTP server on the internet.
+    # An ipBlock rule matches only addresses outside the cluster, so Pods stay unreachable.
+    # Delete this block if you never need to send real e-mails.
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 25
+        - protocol: TCP
+          port: 465
+        - protocol: TCP
+          port: 587

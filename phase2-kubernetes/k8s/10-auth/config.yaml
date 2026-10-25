@@ -1,0 +1,18 @@
+# Non-sensitive settings for the auth side (namespace: auth)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-config
+  namespace: auth
+data:
+  # gRPC port of the auth service (the HTTP port 8082 is hardcoded in the code)
+  PORT: ":50051"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-db-config
+  namespace: auth
+data:
+  # MySQL creates this database on first start
+  MYSQL_DATABASE: "auth_db"

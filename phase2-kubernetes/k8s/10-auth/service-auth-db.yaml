@@ -1,0 +1,15 @@
+# ClusterIP = reachable only from inside the cluster (database must not be exposed).
+# The Service name "auth-db" is the hostname used in DB_URL.
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-db
+  namespace: auth
+spec:
+  type: ClusterIP
+  selector:
+    app: auth-db
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
